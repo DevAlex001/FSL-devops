@@ -54,10 +54,7 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       
-      # - name: Configure AWS Credentials 2
-      #   if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged
-      #   uses: aws-actions/configure-aws-credentials@v4.1.0
-      #   with:
-      #     aws-region: us-east-1
-      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: Upload to s3
+        if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged
+        run: |
+          aws s3 sync ./build s3://${{ github.event.pull_request.base.ref }}-mybucket-test-fsl-bucket
