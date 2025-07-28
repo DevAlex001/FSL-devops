@@ -47,5 +47,5 @@ jobs:
       - name: Terraform Apply
         if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged
         id: apply
-        run: terraform apply -var "environment=${{ lgithub.event.pull_request.base.ref }}" -auto-approve
+        run: terraform apply -var "environment=${{ github.event.pull_request.base.ref }}" -auto-approve
         continue-on-error: true
