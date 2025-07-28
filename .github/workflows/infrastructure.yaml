@@ -16,7 +16,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: ./terraform/${{ github.event.github.base_ref }}
+        working-directory: ./terraform/${{ github.event.pull_request.base.ref }}
     steps: 
       - name: Check out code
         uses: actions/checkout@v2
