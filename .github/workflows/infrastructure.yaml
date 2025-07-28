@@ -41,7 +41,7 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        run: terraform plan -var "environment=${{ lgithub.event.github.base_ref }}"
+        run: terraform plan -var "environment=${{ github.event.github.base_ref }}"
         continue-on-error: true
     
       - name: Terraform Apply
