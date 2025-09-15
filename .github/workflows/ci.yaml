@@ -24,7 +24,7 @@ jobs:
       uses: aws-actions/codeguru-reviewer@v1
       with:
         build_path: ./
-        s3_bucket: my-codeguru-artifacts
+        s3_bucket: aws-community-day-test-alex
 
     - name: Set up Node.js
       uses: actions/setup-node@v2
