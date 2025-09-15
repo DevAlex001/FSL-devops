@@ -1,49 +1,48 @@
 name: CI Pipeline
 
-on: 
+on:
   pull_request:
     branches:
-      -main 
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
 
-  steps: 
-    - name: Check out code
-      uses: actions/checkout@v2
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
 
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1
+      - name: Run CodeGuru Reviewer
+        uses: aws-actions/codeguru-reviewer@v1
+        with:
+          build_path: ./
+          s3_bucket: aws-gen-ai-test-alex
 
-    - name: Run CodeGuru Reviewer
-      uses: aws-actions/codeguru-reviewer@v1
-      with:
-        build_path: ./
-        s3_bucket: aws-gen-ai-test-alex
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '14'
+      - name: Install dependencies
+        run: npm install
 
-    - name: Install dependencies
-      run: npm install
+      - name: Run linter
+        run: npm run lint
 
-    - name: Run linter
-      run: npm run lint
+      - name: Run formatter
+        run: npm run prettier
 
-    - name: Run formatter
-      run: npm run prettier
+      - name: Run tests
+        env:
+          CI: true
+        run: npm run test
 
-    - name: Run tests
-      env: 
-        CI: true
-      run: npm run test
-
-    - name: Build project
-      run: npm run build
+      - name: Build project
+        run: npm run build
