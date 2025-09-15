@@ -25,9 +25,6 @@ jobs:
         with:
           build_path: ./
           s3_bucket: codeguru-reviewer-aws-community-test
-          name: MyCodeAnalysis
-          source_path: .
-          output_format: SARIF
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
